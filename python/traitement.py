@@ -1,7 +1,12 @@
+from pathlib import Path
+
 import pandas as pd
 
+# Racine du dépôt, quel que soit le dossier d'où on lance le script
+RACINE = Path(__file__).resolve().parent.parent
+
 # 1. Import (l'équivalent de proc import)
-df = pd.read_csv("data/bank-additional-full.csv", sep=";")
+df = pd.read_csv(RACINE / "data" / "raw" / "bank-additional-full.csv", sep=";")
 print("Lignes, colonnes :", df.shape)
 
 # 2. Nettoyage (l'équivalent de l'étape DATA)
@@ -51,6 +56,6 @@ print(kpi_metier)
 print(kpi_contact)
 
 # 5. Export
-kpi_metier.to_csv("data/python_kpi_metier.csv", index=False)
-kpi_contact.to_csv("data/python_kpi_contact.csv", index=False)
-clean.to_csv("data/bank_clean.csv", index=False)
+kpi_metier.to_csv(RACINE / "outputs" / "python_kpi_metier.csv", index=False)
+kpi_contact.to_csv(RACINE / "outputs" / "python_kpi_contact.csv", index=False)
+clean.to_csv(RACINE / "data" / "processed" / "bank_clean.csv", index=False)

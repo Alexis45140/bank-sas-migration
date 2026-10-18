@@ -1,4 +1,10 @@
+from pathlib import Path
+
 import pandas as pd
+
+# Racine du dépôt, quel que soit le dossier d'où on lance le script
+RACINE = Path(__file__).resolve().parent.parent
+OUTPUTS = RACINE / "outputs"
 
 def charger(chemin, cle, colonnes):
     """Lit un fichier, garde les colonnes dans un ordre fixe et trie les lignes."""
@@ -29,9 +35,9 @@ comparer(
     colonnes=["job", "nb_clients", "nb_souscriptions",
               "taux_souscription", "nb_appels_moyen"],
     fichiers={
-        "SAS": "data/sas_kpi_metier.csv",
-        "Dataiku": "data/dataiku_kpi_metier.csv",
-        "Python": "data/python_kpi_metier.csv",
+        "SAS": OUTPUTS / "sas_kpi_metier.csv",
+        "Dataiku": OUTPUTS / "dataiku_kpi_metier.csv",
+        "Python": OUTPUTS / "python_kpi_metier.csv",
     },
 )
 
@@ -40,8 +46,8 @@ comparer(
     cle="deja_contacte",
     colonnes=["deja_contacte", "nb_clients", "taux_souscription"],
     fichiers={
-        "SAS": "data/sas_kpi_contact.csv",
-        "Dataiku": "data/dataiku_kpi_contact.csv",
-        "Python": "data/python_kpi_contact.csv",
+        "SAS": OUTPUTS / "sas_kpi_contact.csv",
+        "Dataiku": OUTPUTS / "dataiku_kpi_contact.csv",
+        "Python": OUTPUTS / "python_kpi_contact.csv",
     },
 )

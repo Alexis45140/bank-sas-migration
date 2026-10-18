@@ -1,9 +1,14 @@
+from pathlib import Path
+
 import pandas as pd
 
+# Racine du dépôt, quel que soit le dossier d'où on lance le script
+OUTPUTS = Path(__file__).resolve().parent.parent / "outputs"
+
 sources = {
-    "SAS": "data/sas_kpi_metier.csv",
-    "Dataiku": "data/dataiku_kpi_metier.csv",
-    "Python": "data/python_kpi_metier.csv",
+    "SAS": OUTPUTS / "sas_kpi_metier.csv",
+    "Dataiku": OUTPUTS / "dataiku_kpi_metier.csv",
+    "Python": OUTPUTS / "python_kpi_metier.csv",
 }
 
 for nom, chemin in sources.items():
