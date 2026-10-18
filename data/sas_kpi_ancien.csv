@@ -1,0 +1,12 @@
+job,nb_clients,nb_souscriptions,taux_souscription,nb_appels_moyen
+student,875,275,31.4%,2.1
+retired,1720,434,25.2%,2.5
+unemployed,1014,144,14.2%,2.6
+admin.,10422,1352,13.0%,2.6
+management,2924,328,11.2%,2.5
+technician,6743,730,10.8%,2.6
+self-employed,1421,149,10.5%,2.7
+housemaid,1060,106,10.0%,2.6
+entrepreneur,1456,124,8.5%,2.5
+services,3969,323,8.1%,2.6
+blue-collar,9254,638,6.9%,2.6
