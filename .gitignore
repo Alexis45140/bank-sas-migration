@@ -1,0 +1,27 @@
+# Environnements virtuels Python
+venv/
+.venv/
+env/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Variables d'environnement et secrets
+.env
+.env.*
+
+# Fichiers temporaires Power BI
+*.pbix.bak
+.pbi/localSettings.json
+.pbi/cache.abf
+
+# Fichiers temporaires Office (verrous ~$fichier.xlsx, etc.)
+~$*
+*.tmp
+
+# Systèmes
+.DS_Store
+Thumbs.db
+desktop.ini
