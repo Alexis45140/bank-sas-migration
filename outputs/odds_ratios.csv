@@ -1,0 +1,18 @@
+,odds_ratio,ic_95_bas,ic_95_haut,p_valeur
+Intercept,0.073,0.066,0.081,0.0
+"C(contact, Treatment('telephone'))[T.cellular]",2.341,2.154,2.544,0.0
+"C(tranche_age, Treatment('2. 30-44'))[T.1. <30]",1.395,1.268,1.536,0.0
+"C(tranche_age, Treatment('2. 30-44'))[T.3. 45-59]",0.959,0.882,1.041,0.318
+"C(tranche_age, Treatment('2. 30-44'))[T.4. 60+]",3.44,2.851,4.15,0.0
+"C(job, Treatment('admin.'))[T.blue-collar]",0.623,0.562,0.691,0.0
+"C(job, Treatment('admin.'))[T.entrepreneur]",0.766,0.627,0.936,0.009
+"C(job, Treatment('admin.'))[T.housemaid]",0.732,0.582,0.921,0.008
+"C(job, Treatment('admin.'))[T.management]",0.898,0.783,1.03,0.124
+"C(job, Treatment('admin.'))[T.retired]",1.076,0.894,1.294,0.438
+"C(job, Treatment('admin.'))[T.self-employed]",0.901,0.747,1.086,0.274
+"C(job, Treatment('admin.'))[T.services]",0.704,0.616,0.804,0.0
+"C(job, Treatment('admin.'))[T.student]",1.863,1.553,2.234,0.0
+"C(job, Treatment('admin.'))[T.technician]",0.849,0.767,0.94,0.002
+"C(job, Treatment('admin.'))[T.unemployed]",1.088,0.889,1.332,0.414
+deja_contacte,11.215,9.987,12.594,0.0
+campaign,0.916,0.899,0.933,0.0
