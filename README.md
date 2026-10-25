@@ -111,7 +111,7 @@ Python vs SAS : identique
 | SAS OnDemand for Academics | traitement de référence : `proc import`, étape DATA, `proc sql`, `proc export` |
 | Dataiku Cloud | Flow visuel : recette Préparer, recettes Grouper avec pré-filtre |
 | Python 3.14, pandas 3.0.5 | traitement en code, recette automatisée, scripts de contrôle |
-| Power BI Desktop | tableau de bord avec filtres, Power Query (code M), thème personnalisé |
+| Power BI Desktop | tableau de bord avec filtres, mesures DAX, Power Query (code M), thème personnalisé |
 | Git, GitHub | versionnement du projet |
 
 Compétences transverses : qualité des données, tests de non-régression, analyse de la conversion, recommandations métier.
@@ -148,6 +148,36 @@ L'ordre des règles 3 et 4 est imposé : une fois 999 remplacé par une valeur m
 | `kpi_contact` | par `deja_contacte` : `nb_clients`, `taux_souscription` | `proc sql` avec `group by deja_contacte` | recette Grouper sur `deja_contacte` | `groupby("deja_contacte").agg(...)` |
 
 Le taux de souscription est la moyenne de `souscrit`, et le nombre d'appels moyen la moyenne de `campaign`.
+
+</details>
+
+<details>
+<summary><strong>Mesures DAX du tableau de bord</strong></summary>
+
+<br>
+
+Six mesures et quatre colonnes calculées, sur la table `bank_clean`.
+
+| Mesure | Formule | Rôle |
+|---|---|---|
+| Nb clients | `COUNTROWS ( bank_clean )` | clients retenus par les filtres |
+| Nb souscriptions | `SUM ( bank_clean[souscrit] )` | `souscrit` vaut 1 ou 0 |
+| Taux de souscription | `DIVIDE ( [Nb souscriptions], [Nb clients] )` | 11,27 % sur l'ensemble ; `DIVIDE` rend une valeur vide plutôt qu'une erreur quand un filtre ne garde aucun client |
+| Appels moyens | `AVERAGE ( bank_clean[campaign] )` | nombre moyen d'appels pendant la campagne |
+| Couleur vs moyenne | ci-dessous | couleur de chaque métier selon son taux |
+| Couleur vs moyenne âge | même formule sur `tranche_age` | couleur de chaque tranche d'âge |
+
+```dax
+Couleur vs moyenne =
+VAR TauxGroupe = [Taux de souscription]
+VAR TauxGlobal = CALCULATE ( [Taux de souscription], ALL ( bank_clean[Métier] ) )
+RETURN
+    IF ( TauxGroupe > TauxGlobal, "#C9A227", "#13315C" )
+```
+
+`ALL` retire le filtre du métier : `TauxGlobal` est le taux de tous les métiers, dans la sélection des autres filtres. Un métier au-dessus passe en or, les autres restent en bleu marine (mise en forme conditionnelle).
+
+Colonnes calculées, pour des libellés français dans les filtres et les axes : `Métier` et `Situation familiale` (`SWITCH` sur les codes anglais du jeu UCI, valeur vide pour les inconnus), `Canal d'appel` (portable ou fixe), `Statut contact` (« Déjà contacté » ou « Nouveau client » selon `deja_contacte`).
 
 </details>
 
