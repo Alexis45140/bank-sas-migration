@@ -1,6 +1,6 @@
 # Migration d'un traitement SAS vers Dataiku et Python
 
-Un traitement de données bancaires migré de SAS vers Dataiku puis Python, avec une recette automatisée qui prouve que les trois versions donnent exactement les mêmes chiffres.
+Un traitement de données bancaires migré de SAS vers Dataiku puis Python, avec une recette de non-régression qui prouve que les trois versions donnent exactement les mêmes chiffres.
 
 ![SAS](https://img.shields.io/badge/SAS-OnDemand-13315C)
 ![Dataiku](https://img.shields.io/badge/Dataiku-Cloud-13315C)
@@ -16,7 +16,7 @@ Projet réalisé par **Alexis Claudeon**, Data Analyst · [LinkedIn](https://www
 ## En bref
 
 - **Contexte :** les banques migrent leurs traitements SAS vers Dataiku et Python (coût des licences, rareté des profils SAS, passage au cloud). Le risque : qu'un chiffre change pendant la migration sans que personne ne s'en aperçoive.
-- **Ce que j'ai fait :** j'ai écrit le même traitement dans les trois outils (nettoyage de 41 188 clients, deux indicateurs), puis un script Python qui compare automatiquement les résultats.
+- **Ce que j'ai fait :** j'ai écrit le même traitement dans les trois outils (nettoyage de 41 188 clients, deux indicateurs), puis un script Python qui compare les résultats.
 - **Résultat :** Dataiku et Python reproduisent SAS à l'identique, et six pièges de migration ont été identifiés et résolus en chemin.
 - **Apport métier :** un tableau de bord Power BI et quatre recommandations pour mieux cibler la campagne.
 
@@ -57,7 +57,7 @@ flowchart LR
 
 1. **SAS, la référence** : import, nettoyage et calcul des indicateurs ([`sas/01_traitement_sas.sas`](sas/01_traitement_sas.sas)).
 2. **Dataiku, la migration visuelle** : le même traitement reconstruit en recettes Préparer et Grouper.
-3. **Python, la migration en code** : traduction en pandas ([`python/traitement.py`](python/traitement.py)), puis comparaison automatique des trois versions ([`python/recette.py`](python/recette.py)).
+3. **Python, la migration en code** : traduction en pandas ([`python/traitement.py`](python/traitement.py)), puis recette de non-régression qui compare les trois versions ([`python/recette.py`](python/recette.py)).
 4. **Power BI, la restitution** : tableau de bord avec filtres par situation familiale, âge et canal d'appel.
 
 <p align="center">
@@ -110,7 +110,7 @@ Python vs SAS : identique
 |---|---|
 | SAS OnDemand for Academics | traitement de référence : `proc import`, étape DATA, `proc sql`, `proc export` |
 | Dataiku Cloud | Flow visuel : recette Préparer, recettes Grouper avec pré-filtre |
-| Python 3.14, pandas 3.0.5 | traitement en code, recette automatisée, scripts de contrôle |
+| Python 3.14, pandas 3.0.5 | traitement en code, recette de non-régression, scripts de contrôle |
 | Power BI Desktop | tableau de bord avec filtres, mesures DAX, Power Query (code M), thème personnalisé |
 | Git, GitHub | versionnement du projet |
 
