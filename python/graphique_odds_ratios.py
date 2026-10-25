@@ -79,7 +79,7 @@ ax.set_yticks(lignes)
 ax.set_yticklabels(odds["libelle"])
 ax.set_xlabel("Rapport des chances (échelle logarithmique)")
 ax.set_title(
-    "Un contact précédent multiplie par 11 les chances de souscrire",
+    "Un client déjà contacté a 11 fois plus de chances de souscrire",
     loc="left", fontsize=13, fontweight="bold", color=MARINE,
 )
 for cote in ("top", "right"):

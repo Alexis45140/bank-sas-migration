@@ -18,7 +18,7 @@ Projet réalisé par **Alexis Claudeon**, Data Analyst · [LinkedIn](https://www
 - **Contexte :** les banques migrent leurs traitements SAS vers Dataiku et Python (coût des licences, rareté des profils SAS, passage au cloud). Le risque : qu'un chiffre change pendant la migration sans que personne ne s'en aperçoive.
 - **Ce que j'ai fait :** j'ai écrit le même traitement dans les trois outils (nettoyage de 41 188 clients, deux indicateurs), puis un script Python qui compare les résultats.
 - **Résultat :** Dataiku et Python reproduisent SAS à l'identique, et six pièges de migration ont été identifiés et résolus en chemin.
-- **Apport métier :** un tableau de bord Power BI et quatre recommandations pour mieux cibler la campagne.
+- **Apport métier :** un tableau de bord Power BI et quatre recommandations pour mieux cibler la campagne, confirmées par des tests du χ² et une régression logistique.
 
 ## Résultats clés
 
@@ -31,6 +31,20 @@ Sur **41 188 clients** appelés, **4 640** ont souscrit un dépôt à terme, soi
 | Les **étudiants** et les **retraités** souscrivent le plus | 31,4 % et 25,2 % |
 | Les **ouvriers** sont très sollicités mais souscrivent le moins | 6,9 %, alors qu'ils forment le 2e groupe le plus appelé (9 254 clients) |
 | Le **portable** convertit près de 3 fois mieux que le fixe | 14,7 % contre 5,2 % |
+
+### Les écarts tiennent-ils ? Tests du χ² et régression logistique
+
+Le tableau compare les groupes un par un. Il laisse deux questions : un écart peut-il venir du hasard, et l'effet d'une variable n'est-il pas celui d'une autre (les retraités ont aussi plus de 60 ans) ? [`python/statistiques.py`](python/statistiques.py) y répond.
+
+- **Tests du χ² d'indépendance :** le contact précédent, le canal et la tranche d'âge sont tous trois liés à la souscription (p < 0,001). Sur 41 188 clients, presque tout écart est significatif ; le V de Cramér mesure donc la force du lien : 0,33 pour le contact précédent, 0,17 pour l'âge, 0,15 pour le canal.
+- **Régression logistique** sur 40 858 clients (les 330 au métier inconnu exclus) : elle estime l'effet de chaque variable à âge, métier, canal et nombre d'appels égaux.
+
+![Rapports des chances de la régression logistique, avec leurs intervalles de confiance à 95 %](docs/odds_ratios.png)
+
+- **Les quatre recommandations tiennent à profil égal :** déjà contacté 11,2, 60 ans et plus 3,4, portable 2,3, moins de 30 ans 1,4, ouvrier 0,62 (références : 30-44 ans, employé administratif, téléphone fixe).
+- **Les retraités n'ont pas d'effet propre** (1,08, intervalle de 0,89 à 1,29) : leur taux de 25,2 % s'explique par leur âge. Les étudiants gardent le leur (1,86).
+- **Plus un client est appelé pendant la campagne, moins il souscrit** (0,92 par appel supplémentaire). Le lien est en partie mécanique : un client qui a souscrit n'a plus de raison d'être rappelé.
+- **Comment lire ces chiffres :** un rapport des chances (odds ratio) compare des cotes, p / (1 − p), et non des taux. 11,2 ne veut donc pas dire « 11 fois plus de souscriptions » : les taux bruts, 63,8 % contre 9,3 %, font un écart d'environ 7. Le modèle mesure des liens, il n'est pas fait pour prédire (pseudo R² de McFadden : 0,13).
 
 ### Recommandations
 
@@ -99,7 +113,7 @@ Python vs SAS : identique
 
 ## Limites
 
-- **Corrélation n'est pas causalité.** Les clients déjà contactés ont pu être rappelés justement parce qu'ils étaient intéressés. Seule une campagne test avec un groupe témoin mesurerait l'effet réel du recontact.
+- **Corrélation n'est pas causalité.** La régression neutralise l'âge, le métier, le canal et le nombre d'appels, pas ce que les données ne mesurent pas : les clients déjà contactés ont pu être rappelés justement parce qu'ils étaient intéressés. Seule une campagne test avec un groupe témoin mesurerait l'effet réel du recontact.
 - **Petit effectif des étudiants.** Leur taux de 31,4 % repose sur 875 clients seulement ; il doit être confirmé sur d'autres campagnes.
 - **La durée d'appel (`duration`) est à exclure de tout modèle prédictif.** Elle n'est connue qu'une fois l'appel terminé : l'utiliser pour prédire la souscription serait une fuite de données.
 - **Qualité de la colonne `default`.** Elle ne compte que 3 « yes » et environ 21 % de valeurs inconnues, ce qui la rend peu exploitable.
@@ -111,10 +125,12 @@ Python vs SAS : identique
 | SAS OnDemand for Academics | traitement de référence : `proc import`, étape DATA, `proc sql`, `proc export` |
 | Dataiku Cloud | Flow visuel : recette Préparer, recettes Grouper avec pré-filtre |
 | Python 3.14, pandas 3.0.5 | traitement en code, recette de non-régression, scripts de contrôle |
+| SciPy, statsmodels | tests du χ² d'indépendance et V de Cramér, régression logistique (odds ratios, intervalles de confiance à 95 %) |
+| Matplotlib | graphique des odds ratios |
 | Power BI Desktop | tableau de bord avec filtres, mesures DAX, Power Query (code M), thème personnalisé |
 | Git, GitHub | versionnement du projet |
 
-Compétences transverses : qualité des données, tests de non-régression, analyse de la conversion, recommandations métier.
+Compétences transverses : qualité des données, tests de non-régression, statistiques (tests du χ², régression logistique), analyse de la conversion, recommandations métier.
 
 ## Données
 
@@ -198,6 +214,7 @@ bank-sas-migration/
 │   ├── dataiku_kpi_contact.csv
 │   ├── python_kpi_metier.csv              indicateurs produits par traitement.py
 │   ├── python_kpi_contact.csv
+│   ├── odds_ratios.csv                    rapports des chances (sortie de statistiques.py)
 │   └── archive/                           premiers exports SAS, avec formats (test d'échec)
 ├── sas/
 │   └── 01_traitement_sas.sas
@@ -208,7 +225,11 @@ bank-sas-migration/
 │   ├── traitement.py                      nettoyage et indicateurs
 │   ├── recette.py                         comparaison SAS / Dataiku / Python
 │   ├── inspection.py                      aperçu des colonnes et des types des trois exports
-│   └── diagnostic.py                      contrôle rapide d'un export SAS
+│   ├── diagnostic.py                      contrôle rapide d'un export SAS
+│   ├── statistiques.py                    tests du χ² et régression logistique
+│   └── graphique_odds_ratios.py           graphique des odds ratios
+├── docs/
+│   └── odds_ratios.png
 ├── powerbi/
 │   ├── bank_dashboard.pbix
 │   ├── theme_banque.json
@@ -224,7 +245,7 @@ bank-sas-migration/
 
 <br>
 
-Prérequis : Python 3.11 ou plus récent (projet testé avec Python 3.14 et pandas 3.0.5).
+Prérequis : Python 3.12 ou plus récent, qu'exigent NumPy et SciPy. Projet testé avec Python 3.14 et pandas 3.0.5 ; toute la chaîne, analyse statistique comprise, relancée avec Python 3.12 et les versions de `requirements.txt`.
 
 ```bash
 git clone https://github.com/Alexis45140/bank-sas-migration.git
@@ -240,10 +261,12 @@ pip install -r requirements.txt
 ```
 
 ```bash
-python python/traitement.py    # nettoyage et indicateurs : data/processed/ et outputs/python_*
-python python/recette.py       # comparaison SAS / Dataiku / Python
-python python/inspection.py    # aperçu des trois exports kpi_metier
-python python/diagnostic.py    # contrôle de l'export SAS kpi_metier
+python python/traitement.py             # nettoyage et indicateurs : data/processed/ et outputs/python_*
+python python/recette.py                # comparaison SAS / Dataiku / Python
+python python/inspection.py             # aperçu des trois exports kpi_metier
+python python/diagnostic.py             # contrôle de l'export SAS kpi_metier
+python python/statistiques.py           # tests du χ² et régression logistique : outputs/odds_ratios.csv
+python python/graphique_odds_ratios.py  # graphique des odds ratios : docs/odds_ratios.png
 ```
 
 Les scripts repèrent la racine du dépôt à partir de leur propre emplacement : ils fonctionnent quel que soit le dossier d'où on les lance.
