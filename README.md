@@ -19,6 +19,8 @@ Projet réalisé par **Alexis Claudeon**, Data Analyst · [LinkedIn](https://www
 - **Ce que j'ai fait :** j'ai écrit le même traitement dans les trois outils (nettoyage de 41 188 clients, deux indicateurs), puis un script Python qui compare les résultats.
 - **Résultat :** Dataiku et Python reproduisent SAS à l'identique, et six pièges de migration ont été identifiés et résolus en chemin.
 - **Apport métier :** un tableau de bord Power BI et quatre recommandations pour mieux cibler la campagne, confirmées par des tests du χ² et une régression logistique.
+- **Recommandation :** basculer ce traitement sur Python ou Dataiku et retirer sa version SAS : les deux reproduisent ses indicateurs à l'identique, 4 comparaisons sur 4.
+- **Limite :** la recette porte sur deux indicateurs d'un seul traitement, écrit pour le projet ; dans une vraie migration, elle se rejoue sur chaque traitement et chaque table de sortie.
 
 ## Résultats clés
 
